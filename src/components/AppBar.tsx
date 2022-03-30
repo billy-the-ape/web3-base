@@ -15,6 +15,8 @@ import useWeb3Session from '@/hooks/useWeb3Session';
 import { shortenAddress } from '@/util/string';
 import NextNProgress from 'nextjs-progressbar';
 
+const BUTTON_WIDTH = 170;
+
 const HeaderBox = styled(Box)(({ theme: { palette } }) => ({
   display: 'inline-flex',
   alignItems: 'center',
@@ -25,7 +27,7 @@ const HeaderBox = styled(Box)(({ theme: { palette } }) => ({
 const AppBar: React.FC = () => {
   const { t } = useTranslation();
 
-  const { signIn, status, address } = useWeb3Session();
+  const { signIn, signOut, status, address } = useWeb3Session();
 
   return (
     <MuiAppBar>
@@ -43,16 +45,29 @@ const AppBar: React.FC = () => {
           </HeaderBox>
         </Box>
         {status === 'loading' && (
-          <Skeleton animation="wave" height={37} width={170} />
+          <Skeleton animation="wave" height={37} width={BUTTON_WIDTH} />
         )}
         {status === 'unauthenticated' && (
-          <Button variant="outlined" onClick={signIn}>
+          <Button
+            variant="outlined"
+            sx={{
+              width: BUTTON_WIDTH,
+              display: 'flex',
+            }}
+            onClick={signIn}
+          >
             <WalletIcon sx={{ mr: 1 }} />
-            {t('connect')}
+            <Box flex="1" textAlign="center">
+              {t('connect')}
+            </Box>
           </Button>
         )}
         {status === 'authenticated' && address && (
-          <Button variant="outlined" onClick={signIn}>
+          <Button
+            variant="outlined"
+            sx={{ width: BUTTON_WIDTH }}
+            onClick={signOut}
+          >
             <WalletIcon sx={{ mr: 1 }} />
             {shortenAddress(address)}
           </Button>

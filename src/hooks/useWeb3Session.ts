@@ -30,10 +30,14 @@ const useWeb3Session = () => {
   useEffect(() => {
     const func = async ([newAddress]: [string]) => {
       start();
-      await signInSession('credentials', {
-        redirect: false,
-        address: newAddress,
-      });
+      if (newAddress) {
+        await signInSession('credentials', {
+          redirect: false,
+          address: newAddress,
+        });
+      } else {
+        await signOutSession();
+      }
       done();
       setAddress(newAddress);
     };
